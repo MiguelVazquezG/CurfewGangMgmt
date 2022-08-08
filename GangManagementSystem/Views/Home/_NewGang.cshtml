@@ -1,0 +1,81 @@
+﻿@model GangManagementSystem.Views.ViewModels.HomeViewModel
+
+@{
+    ViewBag.Title = "Home Page";
+}
+<script>
+    var authorized = '@Model.Authorized';
+    var basePath = '@Model.env';
+    var racfid = '@Model.racfid';
+    var Source = 'GangManagementSystem';
+
+    $(document).ready(function () {
+
+        GetGangsPG();
+
+    });
+
+    function GetGangsPG(){
+        let action = 'Read/GangPG';
+
+        $.ajax({
+            type: "GET",
+            url: basePath + action,
+            headers: { 'Racfid': racfid, 'Source': Source },
+            //data: AjaxData, // put your data here that you want to pass in server method
+            contentType: "application/json",
+            dataType: "json",
+            success: function (response) {
+
+                let gangs = response.Result;
+
+                //$.each(divisions, function (i, item) {
+                //    $('#sDivision').append($('<option>', {
+                //        value: item.DivisionID,
+                //        text: item.DivisionName
+                //    }));
+                //});
+            },
+            failure: OnError,
+        });
+    }
+
+    function OnError(response) {
+        $('#loader').addClass('hidden')
+        alert(response.d);
+    }
+</script>
+<style>
+</style>
+<div class="jumbotron">
+    <form>
+        <div class="form-group">
+            <label for="GangName">Gang Name</label>
+            <input type="text" class="form-control" id="GangName" placeholder="Enter gang name">
+        </div>
+        <div class="form-group">
+            <label for="SupervisorJobCode">Supervisor</label>
+            <input type="text" class="form-control" id="SupervisorJobCode" placeholder="Enter Supervisor">
+            <small class="form-text text-muted">Supervisor JobCode</small>
+        </div>
+        <div class="form-group">
+            <label for="division">Division</label>
+            <select class="form-control" id="division">
+                <option>1</option>
+                <option>2</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="lunch">Lunch</label>
+            <input type="number" class="form-control" id="lunch" placeholder="Enter lunch">
+        </div>
+        <div class="form-group">
+            <label for="gangtype">Gang Type</label>
+            <select class="form-control" id="gangtype">
+                <option>1</option>
+                <option>2</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary" style="float: right;width:10%">Submit</button>
+    </form>
+</div>

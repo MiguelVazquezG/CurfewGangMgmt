@@ -1,0 +1,18 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="GangManagementSystem.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="AppLevel" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Q</Value>
+    </Setting>
+    <Setting Name="svcGangManagementDEV" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">http://localhost:9339/api</Value>
+    </Setting>
+    <Setting Name="svcGangManagementQA" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">http://localhost:9339/api</Value>
+    </Setting>
+    <Setting Name="svcGangManagementPROD" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">http://localhost:9339/api</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

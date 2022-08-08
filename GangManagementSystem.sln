@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.1622
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GangManagementSystem", "GangManagementSystem\GangManagementSystem.csproj", "{E94038C2-6617-404D-9C00-EF3342CD1264}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E94038C2-6617-404D-9C00-EF3342CD1264}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E94038C2-6617-404D-9C00-EF3342CD1264}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E94038C2-6617-404D-9C00-EF3342CD1264}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E94038C2-6617-404D-9C00-EF3342CD1264}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A45033CF-51AC-4B9C-AF7E-8BDC4B9EE2F5}
+	EndGlobalSection
+EndGlobal

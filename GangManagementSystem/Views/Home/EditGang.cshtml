@@ -1,0 +1,299 @@
+﻿@model GangManagementSystem.Views.ViewModels.HomeViewModel
+
+@{
+    ViewBag.Title = "Home Page";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script>
+    var authorized = '@Model.Authorized';
+    var basePath = '@Model.env';
+    var racfid = '@Model.racfid';
+    var Source = 'GangManagementSystem';
+
+    $(document).ready(function () {
+
+        $('#gangtype').attr('disabled', true);
+        $('#division').attr('disabled', true);
+        $('#func').attr('disabled', true);
+        $('#afe').attr('disabled', true);
+
+        GetGangsPG();
+
+        $("#gangs").change(function () {
+
+            let gangId = $("#gangs").val();
+
+            GetGangDetailsById(gangId);
+        });
+
+        $('#SupervisorJobCode').blur(function () {
+            let jobcode = $('#SupervisorJobCode').val();
+            GetJobCodeInfo(jobcode);
+        });
+
+        $('#submit').click(function () {
+            PostGang();
+        });
+    });
+
+    function PostGang() {
+        debugger
+    };
+
+    function GetJobCodeInfo(jobcode) {
+
+        let action = '/Read/SupervisorByJobCode';
+
+        if (jobcode != null && jobcode !== undefined) {
+            let AjaxData = {
+                'jobcode': jobcode
+            };
+
+            $.ajax({
+                type: "GET",
+                url: basePath + action,
+                headers: { 'Racfid': racfid, 'Source': Source },
+                data: AjaxData, // put your data here that you want to pass in server method
+                contentType: "application/json",
+                dataType: "json",
+                success: function (response) {
+                    let info = response.Result;
+                    DisplaySupervisorInfo(info);
+                },
+                failure: OnError,
+            });
+        }
+
+    };
+
+    function DisplaySupervisorInfo(info) {
+        if (info != null && info !== undefined && info.length > 0) {
+            $('#supname').text(info[0].First_Name);
+            $('#suplast').text(info[0].Last_Name);
+            $('#suptitle').text(info[0].Title);
+            $('#supracfid').text(info[0].Racf_id);
+            $('#supemail').text(info[0].Email);
+
+            $('#supinfo').removeClass('form-group hidden').addClass('form-group');
+            $('#supText').text('');
+        }
+        else {
+            $('#supText').text('USER NOT FOUND');
+
+            $('#supname').text('');
+            $('#suplast').text('');
+            $('#suptitle').text('');
+            $('#supracfid').text('');
+            $('#supemail').text('');
+
+            $('#supinfo').removeClass('form-group').addClass('form-group hidden');
+        }
+
+    }
+
+    function GetGangDetailsById(id) {
+        let action = "/Read/GangDetailsById";
+
+        if (id != 'GANG') {
+
+            let AjaxData = {
+                'id': id
+            };
+
+            $.ajax({
+                type: "GET",
+                url: basePath + action,
+                headers: { 'Racfid': racfid, 'Source': Source },
+                data: AjaxData, // put your data here that you want to pass in server method
+                contentType: "application/json",
+                dataType: "json",
+                success: function (response) {
+
+                    let gang = response.Result;
+
+                    GangDetails(gang);
+                },
+                failure: OnError,
+            });
+        } else {
+            alert("Select a valid gang.");
+            return;
+        }
+        
+    }
+
+    function GangDetails(gangDetails) {
+        debugger
+        if (gangDetails != null) {
+            $('#division').val(gangDetails[0].Division);
+            $('#menauth').val(gangDetails[0].Men_Authorized);
+            $('#gangtype').val(gangDetails[0].Gang_Type_Code);
+            $('#Supervisor').val(gangDetails[0].Supervisor1);
+            $('#lunch').val(gangDetails[0].Lunch);
+        }
+        else {
+
+        }
+    }
+
+    function GetSDivision() {
+
+        let action = '/Read/SDivision';
+
+        $.ajax({
+            type: "GET",
+            url: basePath + action,
+            headers: { 'Racfid': racfid, 'Source': 'IndustrySurveyTracking' },
+            //data: AjaxData, // put your data here that you want to pass in server method
+            contentType: "application/json",
+            dataType: "json",
+            success: function (response) {
+
+                let divisions = response.Result;
+
+                //$.each(divisions, function (i, item) {
+                //    $('#sDivision').append($('<option>', {
+                //        value: item.DivisionID,
+                //        text: item.DivisionName
+                //    }));
+                //});
+            },
+            failure: OnError,
+        });
+    }
+
+    function GetGangsPG(){
+        let action = '/Read/GangPG';
+
+        $.ajax({
+            type: "GET",
+            url: basePath + action,
+            headers: { 'Racfid': racfid, 'Source': Source },
+            //data: AjaxData, // put your data here that you want to pass in server method
+            contentType: "application/json",
+            dataType: "json",
+            success: function (response) {
+
+                let gangs = response.Result;
+
+                $.each(gangs, function (i, item) {
+                    $('#gangs').append($('<option>', {
+                        value: item.Gang__,
+                        text: item.Gang__
+                    }));
+                });
+
+            },
+            failure: OnError,
+        });
+    }
+
+    function OnError(response) {
+        $('#loader').addClass('hidden')
+        alert(response.d);
+    }
+</script>
+<style>
+</style>
+<div class="jumbotron">
+    <div>
+        <strong style="text-align:center; font-size:large">
+            EDIT GANG DETAILS
+        </strong>
+    </div>
+    <br />
+    <form id="editGangForm">
+        <div class="form-group">
+            <label for="SupervisorJobCode">Supervisor</label>
+            <input type="text" class="form-control" id="SupervisorJobCode" placeholder="Enter Supervisor">
+            <small class="form-text text-muted" id="supText">Supervisor JobCode</small>
+            <div class="form-group hidden" id="supinfo">
+                <label id="supname"></label>
+                <label id="suplast"></label><br />
+                <label id="suptitle"></label><br />
+                RacfId : <label id="supracfid"></label> Email : <label id="supemail"></label>
+            </div>
+        </div>
+        <table class="table">
+            <thead>
+
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <div class="form-group">
+                            <label for="Gangs">Gang to edit</label>
+                            <select class="form-control" id="gangs">
+                                <option selected>GANG</option>
+                            </select>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group">
+                            <label for="gangtype">Gang Type</label>
+                            <input type="text" class="form-control" id="gangtype">
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group">
+                            <label for="division">Division</label>
+                            <input type="text" class="form-control" id="division">
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="form-group">
+                            <label for="menauth">Men Authorized</label>
+                            <input type="text" class="form-control" id="menauth">
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group">
+                            <label for="lunch">Lunch</label>
+                            <input type="number" class="form-control" id="lunch" placeholder="Enter lunch">
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group">
+                            <label for="costcener">Cost center</label>
+                            <input type="text" class="form-control" id="costcener">
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="form-group">
+                            <label for="store">Store</label>
+                            <input type="text" class="form-control" id="store">
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group">
+                            <label for="rin">Rin</label>
+                            <input type="text" class="form-control" id="rin">
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group">
+                            <label for="rin">Func</label>
+                            <input type="text" class="form-control" id="func">
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="form-group">
+                            <label for="rin">AFE</label>
+                            <input type="text" class="form-control" id="afe">
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+    <div>
+        <button id="submit" class="btn btn-primary" style="float: right;width:10%">Submit</button>
+    </div>
+</div>
+
